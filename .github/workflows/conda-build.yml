@@ -36,7 +36,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: conda-package
-          path: build/noarch/*.conda
+          path: build/noarch
           retention-days: 7
 
   test:
@@ -66,6 +66,9 @@ jobs:
       - name: Test conda package
         shell: bash -l {0}
         run: |
+          # Index build dir
+          conda index ./build
+          
           # Install from local package
           conda install -y --use-local -c ./build blackboxphaseopt
           
