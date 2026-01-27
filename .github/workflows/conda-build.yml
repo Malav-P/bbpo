@@ -1,0 +1,73 @@
+name: Build and Test Conda Package
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Miniconda
+        uses: conda-incubator/setup-miniconda@v3
+        with:
+          auto-update-conda: true
+          python-version: 3.13
+          miniforge-version: latest
+          channels: conda-forge,gurobi,defaults
+          channel-priority: strict
+      
+      - name: Install conda-build
+        shell: bash -l {0}
+        run: |
+          conda install -y conda-build conda-verify
+      
+      - name: Build conda package
+        shell: bash -l {0}
+        run: |
+          conda build conda-recipe --output-folder build
+      
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: conda-package
+          path: build/noarch/*.conda
+          retention-days: 7
+
+  test:
+    needs: build
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: conda-package
+          path: build/noarch
+      
+      - name: Setup Miniconda
+        uses: conda-incubator/setup-miniconda@v3
+        with:
+          auto-update-conda: true
+          python-version: 3.13
+          miniforge-version: latest
+          channels: conda-forge,gurobi,defaults
+          channel-priority: strict
+      
+      - name: Test conda package
+        shell: bash -l {0}
+        run: |
+          # Install from local package
+          conda install -y --use-local -c ./build blackboxphaseopt
+          
+          # Run import test
+          python -c "import blackboxphaseopt; print('Import successful on ${{ matrix.os }}')"
