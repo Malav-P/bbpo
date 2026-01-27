@@ -69,5 +69,6 @@ jobs:
           # Install from local package
           conda install -y --use-local -c ./build blackboxphaseopt
           
-          # Run import test
-          python -c "import blackboxphaseopt; print('Import successful on ${{ matrix.os }}')"
+          # Run test suite
+          conda install -y pytest
+          pytest tests/ -v
