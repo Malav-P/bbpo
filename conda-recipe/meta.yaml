@@ -27,6 +27,6 @@ test:
     - blackboxphaseopt
 
 about:
-  home: https://github.com/Malav-P/blackboxphaseopt
+  home: https://github.com/Malav-P/bbpo
   summary: "Brief description"
   license: MIT
