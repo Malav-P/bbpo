@@ -37,4 +37,4 @@ jobs:
         env:
           ANACONDA_API_TOKEN: ${{ secrets.ANACONDA_API_TOKEN }}
         run: |
-          anaconda upload build/noarch/*.conda --label main --skip-existing
+          anaconda upload build/noarch/*.conda --label main --skip-existing --force
