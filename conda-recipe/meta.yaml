@@ -25,6 +25,12 @@ requirements:
 test:
   imports:
     - blackboxphaseopt
+  requires:
+    - pytest
+  source_files:
+    - tests/
+  commands:
+    - pytest tests/ -v
 
 about:
   home: https://github.com/Malav-P/bbpo
