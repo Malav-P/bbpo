@@ -286,17 +286,20 @@ def gen_state_history(ta,
 
     b, _ = initial_state.shape
 
+    if is_not_array_like(time):
+        time = np.array(b * (time,))
+
+    if is_not_array_like(phase):
+        phase = np.array(b * (phase,))
+
     rem = (-b) % ta_b
     if rem:
         initial_state = np.vstack([initial_state] + rem * [initial_state[0]])
+        time = np.hstack([time] + rem * [time[0]])
+        phase = np.hstack([phase] + rem * [phase[0]])
 
     B, _ = initial_state.shape
 
-    if is_not_array_like(time):
-        time = np.array(B * (time,))
-
-    if is_not_array_like(phase):
-        phase = np.array(B * (phase,))
     
     tt = np.array([np.linspace(0, t, n_points) for t in time]) # (B, n_points)
 
