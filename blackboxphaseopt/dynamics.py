@@ -286,8 +286,9 @@ def gen_state_history(ta,
 
     b, _ = initial_state.shape
 
-    if b % ta_b:
-        initial_state = np.vstack((initial_state,) + (b % ta_b)*(initial_state[0],))
+    rem = (-b) % ta_b
+    if rem:
+        initial_state = np.vstack([initial_state] + rem * [initial_state[0]])
 
     B, _ = initial_state.shape
 
