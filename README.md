@@ -36,7 +36,7 @@ Create a conda env with the following packages
 Activate this environment. Install our package
 
 ```
-git clone https://github.com/Malav-P/bbpo
+git clone -b dev https://github.com/Malav-P/bbpo
 cd bbpo
 pip install -e .
 ```
